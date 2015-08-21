@@ -23,4 +23,5 @@
 [merge]
 	tool = vimdiff
 [core]
-	excludesfile = ~/.cvsignore
+    excludesfile = ~/.cvsignore
+    editor = vimdiff
