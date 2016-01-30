@@ -122,6 +122,9 @@ augroup END
 :set t_Co=256 " 256 colors
 :set background=dark
 :color solarized
+" Hybrid line numbers
+:set nu
+:set rnu
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " STATUS LINE
@@ -283,6 +286,7 @@ function! RunTests(filename)
     if expand("%") != ""
       :w
     end
+    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
     if match(a:filename, '\.feature$') != -1
         exec ":!script/features " . a:filename
     else
@@ -321,3 +325,6 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_match_window = 'order:ttb'
+
+" Activate Matchit - enhances % command
+runtime macros/matchit.vim
