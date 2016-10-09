@@ -22,6 +22,7 @@ set laststatus=2
 set showmatch
 set incsearch
 set hlsearch
+set list listchars=tab:»·,trail:· " show extra space characters
 " make searches case-sensitive only if they contain upper-case characters
 set ignorecase smartcase
 " highlight current line
@@ -131,6 +132,7 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC KEY MAPS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -144,6 +146,8 @@ nnoremap <c-l> <c-w>l
 imap <c-l> <space>=><space>
 " Can't be bothered to understand ESC vs <c-c> in insert mode
 imap <c-c> <esc>
+"Mute highlighting till next search
+nnoremap <silent> <c-m> :<c-u>nohlsearch<cr><c-m><c-L>
 "Clear the search buffer when hitting return
 :nnoremap <cr> :nohlsearch<cr>
 nnoremap <leader><leader> <c-^>
@@ -250,7 +254,7 @@ nnoremap <leader>. :call OpenTestAlternate()<cr>
 "call MapCR()
 nnoremap <leader>t :call RunTestFile()<cr>
 nnoremap <leader>T :call RunNearestTest()<cr>
-nnoremap <leader>a :call RunTests('')<cr>
+"nnoremap <leader>a :call RunTests('')<cr>
 nnoremap <leader>c :w\|:!script/features<cr>
 nnoremap <leader>w :w\|:!script/features --profile wip<cr>
 
@@ -296,7 +300,7 @@ function! RunTests(filename)
         " Fall back to the .test-commands pipe if available, assuming someone
         " is reading the other side and running the commands
         elseif filewritable(".test-commands")
-          let cmd = 'rspec --color --format progress --require "~/lib/vim_rspec_formatter" --format VimFormatter --out tmp/quickfix'
+          let cmd = 'rspec --color --format doc progress --require "~/lib/vim_rspec_formatter" --format VimFormatter --out tmp/quickfix'
           exec ":!echo " . cmd . " " . a:filename . " > .test-commands"
 
           " Write an empty string to block until the command completes
@@ -305,10 +309,10 @@ function! RunTests(filename)
           redraw!
         " Fall back to a blocking test run with Bundler
         elseif filereadable("Gemfile")
-            exec ":!bundle exec rspec --color " . a:filename
+            exec ":!bundle exec rspec --color --format doc " . a:filename
         " Fall back to a normal blocking test run
         else
-            exec ":!rspec --color " . a:filename
+            exec ":!rspec --color --format doc " . a:filename
         end
     end
 endfunction
@@ -325,6 +329,24 @@ let g:ctrlp_custom_ignore = {
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_match_window = 'order:ttb'
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+  " Use ag as Ack program
+  let g:ackprg = 'ag --vimgrep'
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  "let g:ctrlp_use_caching = 0
+endif
+
+" map Silver Searcher
+map <leader>a :Ack!<space>
 
 " Activate Matchit - enhances % command
 runtime macros/matchit.vim
+
+"Ultisnips
+let g:UltiSnipsExpandTrigger="<c-j>"
