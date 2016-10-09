@@ -130,8 +130,13 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " STATUS LINE
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-:set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
-
+:set statusline=%<%f\ (%{&ft})\ %{fugitive#statusline()}\ [%L,%p%%]\ %-4(%m%)%=%-19(%3l,%02c%03V%)
+highlight StatusLine cterm=reverse
+" highlight the status bar when in insert mode
+if version >= 700
+  au InsertEnter * hi StatusLine cterm=bold
+  au InsertLeave * hi StatusLine cterm=reverse
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MISC KEY MAPS
