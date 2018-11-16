@@ -3,7 +3,20 @@
 
 autocmd!
 
-execute pathogen#infect()
+" Package manager
+packadd minpac
+call minpac#init()
+
+call minpac#add('tpope/vim-surround')
+call minpac#add('tpope/vim-fugitive')
+call minpac#add('altercation/vim-colors-solarized')
+call minpac#add('tommcdo/vim-exchange')
+call minpac#add('vim-ruby/vim-ruby')
+call minpac#add('ctrlpvim/ctrlp.vim')
+call minpac#add('k-takata/minpac', {'type': 'opt'})
+
+command! PackUpdate call minpac#update()
+command! PackClean call minpac#clean()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " BASIC EDITING CONFIGURATION
@@ -154,7 +167,7 @@ imap <c-c> <esc>
 "Mute highlighting till next search
 nnoremap <silent> <c-m> :<c-u>nohlsearch<cr><c-m><c-L>
 "Clear the search buffer when hitting return
-:nnoremap <cr> :nohlsearch<cr>
+nnoremap <cr> :nohlsearch<cr>
 nnoremap <leader><leader> <c-^>
 " Close all other windows, open a vertical split, and open this file's test
 " alternate in it.
