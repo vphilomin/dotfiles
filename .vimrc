@@ -145,7 +145,7 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " COLOR
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-:set t_Co=256 " 256 colors
+":set t_Co=256 " 256 colors
 :set background=dark
 :color solarized
 " Hybrid line numbers
@@ -222,13 +222,13 @@ map <leader>v :view %%
 " RENAME CURRENT FILE
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
+  let old_name = expand('%')
+  let new_name = input('New file name: ', expand('%'), 'file')
+  if new_name != '' && new_name != old_name
+    exec ':saveas ' . new_name
+    exec ':silent !rm ' . old_name
+    redraw!
+  endif
 endfunction
 map <leader>n :call RenameFile()<cr>
 
@@ -289,62 +289,62 @@ nnoremap <leader>c :w\|:!script/features<cr>
 nnoremap <leader>w :w\|:!script/features --profile wip<cr>
 
 function! RunTestFile(...)
-    if a:0
-        let command_suffix = a:1
-    else
-        let command_suffix = ""
-    endif
+  if a:0
+      let command_suffix = a:1
+  else
+      let command_suffix = ""
+  endif
 
-    " Run the tests for the previously-marked file.
-    let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
-    if in_test_file
-        call SetTestFile()
-    elseif !exists("t:grb_test_file")
-        return
-    end
-    call RunTests(t:grb_test_file . command_suffix)
+  " Run the tests for the previously-marked file.
+  let in_test_file = match(expand("%"), '\(.feature\|_spec.rb\)$') != -1
+  if in_test_file
+      call SetTestFile()
+  elseif !exists("t:grb_test_file")
+      return
+  end
+  call RunTests(t:grb_test_file . command_suffix)
 endfunction
 
 function! RunNearestTest()
-    let spec_line_number = line('.')
-    call RunTestFile(":" . spec_line_number)
+  let spec_line_number = line('.')
+  call RunTestFile(":" . spec_line_number)
 endfunction
 
 function! SetTestFile()
-    " Set the spec file that tests will be run for.
-    let t:grb_test_file=@%
+  " Set the spec file that tests will be run for.
+  let t:grb_test_file=@%
 endfunction
 
 function! RunTests(filename)
-    " Write the file and run tests for the given filename
-    if expand("%") != ""
-      :w
-    end
-    :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
-    if match(a:filename, '\.feature$') != -1
-        exec ":!script/features " . a:filename
-    else
-        " First choice: project-specific test script
-        if filereadable("script/test")
-            exec ":!script/test " . a:filename
-        " Fall back to the .test-commands pipe if available, assuming someone
-        " is reading the other side and running the commands
-        elseif filewritable(".test-commands")
-          let cmd = 'rspec --color --format doc progress --require "~/lib/vim_rspec_formatter" --format VimFormatter --out tmp/quickfix'
-          exec ":!echo " . cmd . " " . a:filename . " > .test-commands"
+  " Write the file and run tests for the given filename
+  if expand("%") != ""
+    :w
+  end
+  :silent !echo;echo;echo;echo;echo;echo;echo;echo;echo;echo
+  if match(a:filename, '\.feature$') != -1
+      exec ":!script/features " . a:filename
+  else
+      " First choice: project-specific test script
+      if filereadable("script/test")
+          exec ":!script/test " . a:filename
+      " Fall back to the .test-commands pipe if available, assuming someone
+      " is reading the other side and running the commands
+      elseif filewritable(".test-commands")
+        let cmd = 'rspec --color --format doc progress --require "~/lib/vim_rspec_formatter" --format VimFormatter --out tmp/quickfix'
+        exec ":!echo " . cmd . " " . a:filename . " > .test-commands"
 
-          " Write an empty string to block until the command completes
-          sleep 100m " milliseconds
-          :!echo > .test-commands
-          redraw!
-        " Fall back to a blocking test run with Bundler
-        elseif filereadable("Gemfile")
-            exec ":!bundle exec rspec --color --format doc " . a:filename
-        " Fall back to a normal blocking test run
-        else
-            exec ":!rspec --color --format doc " . a:filename
-        end
-    end
+        " Write an empty string to block until the command completes
+        sleep 100m " milliseconds
+        :!echo > .test-commands
+        redraw!
+      " Fall back to a blocking test run with Bundler
+      elseif filereadable("Gemfile")
+          exec ":!bundle exec rspec --color --format doc " . a:filename
+      " Fall back to a normal blocking test run
+      else
+          exec ":!rspec --color --format doc " . a:filename
+      end
+  end
 endfunction
 
 " Ctrl P mappings
@@ -352,24 +352,23 @@ let g:ctrlp_map = '<leader>f'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
+\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+\ 'file': '\v\.(exe|so|dll)$',
+\ 'link': 'some_bad_symbolic_links',
+\ }
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 0
 let g:ctrlp_jump_to_buffer = 0
 let g:ctrlp_match_window = 'order:ttb'
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  " Use ag as Ack program
-  let g:ackprg = 'ag --vimgrep'
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
+" Ripgrep
+if executable('rg')
+  " Use rg over grep
+  set grepprg=rg\ --color=never
+  " Use rg as Ack program
+  let g:ackprg = 'rg --vimgrep'
+  " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
+  " rg is fast enough that CtrlP doesn't need to cache
   "let g:ctrlp_use_caching = 0
 endif
 
@@ -381,7 +380,7 @@ runtime macros/matchit.vim
 
 command! Path :call EchoPath()
 function! EchoPath()
-  echo join(split(&path, ','), "\n")
+echo join(split(&path, ','), "\n")
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""
@@ -400,23 +399,23 @@ set shortmess+=c
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
+" Recently vim can merge signcolumn and number column into one
+set signcolumn=number
 else
-  set signcolumn=yes
+set signcolumn=yes
 endif
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+let col = col('.') - 1
+return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use <c-t> to trigger completion.
@@ -425,7 +424,7 @@ inoremap <silent><expr> <c-t> coc#refresh()
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+                            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -442,20 +441,32 @@ nmap <silent> gr <Plug>(coc-references)
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
+if (index(['vim','help'], &filetype) >= 0)
+  execute 'h '.expand('<cword>')
+elseif (coc#rpc#ready())
+  call CocActionAsync('doHover')
+else
+  execute '!' . &keywordprg . " " . expand('<cword>')
+endif
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
+" Show signature help after completion or jump placeholders
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
+
+function! RubocopAutocorrect()
+  execute "!rubocop -a " . bufname("%")
+endfunction
+
+map <silent> <Leader>cop :call RubocopAutocorrect()<cr>
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
 
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
