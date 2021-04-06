@@ -8,6 +8,11 @@ autocmd!
 packadd minpac
 call minpac#init()
 
+call minpac#add('edkolev/tmuxline.vim')
+call minpac#add('vim-airline/vim-airline')
+call minpac#add('vim-airline/vim-airline-themes')
+call minpac#add('jiangmiao/auto-pairs')
+call minpac#add('morhetz/gruvbox')
 call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
 call minpac#add('tpope/vim-surround')
 call minpac#add('tpope/vim-fugitive')
@@ -112,7 +117,6 @@ augroup vimrcEx
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
-
   "for ruby, autoindent with two spaces, always expand tabs
   autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber set ai sw=2 sts=2 et
   autocmd FileType python set sw=4 sts=4 et
@@ -133,7 +137,7 @@ augroup vimrcEx
   " Leave the return key alone when in command line windows, since it's used
   " to run commands there.
   autocmd! CmdwinEnter * :unmap <cr>
-  autocmd! CmdwinLeave * :call MapCR()
+  " autocmd! CmdwinLeave * :call MapCR()
 
   " *.md is markdown
   autocmd! BufNewFile,BufRead *.md setlocal ft=
@@ -147,7 +151,8 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 ":set t_Co=256 " 256 colors
 :set background=dark
-:color solarized
+" color solarized
+color gruvbox
 " Hybrid line numbers
 :set nu
 :set rnu
@@ -179,7 +184,8 @@ imap <c-c> <esc>
 "Mute highlighting till next search
 nnoremap <silent> <c-m> :<c-u>nohlsearch<cr><c-m><c-L>
 "Clear the search buffer when hitting return
-nnoremap <cr> :nohlsearch<cr>
+"nnoremap <cr><cr> :nohlsearch<cr>
+nnoremap <expr> <CR> &buftype ==# 'quickfix' ? "\<CR>" : "\:nohlsearch\<CR>"
 nnoremap <leader><leader> <c-^>
 " Close all other windows, open a vertical split, and open this file's test
 " alternate in it.
@@ -195,7 +201,6 @@ endfunction
 map <leader>l :w\|:silent !reload-chrome<cr>
 " Align selected lines
 vnoremap <leader>ib :!align<cr>
-
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " MULTIPURPOSE TAB KEY
 " Indent if we're at the beginning of a line. Else, do completion.
@@ -363,7 +368,7 @@ let g:ctrlp_match_window = 'order:ttb'
 " Ripgrep
 if executable('rg')
   " Use rg over grep
-  set grepprg=rg\ --color=never
+  set grepprg=rg\ --vimgrep
   " Use rg as Ack program
   let g:ackprg = 'rg --vimgrep'
   " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
