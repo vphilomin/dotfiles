@@ -8,6 +8,7 @@ autocmd!
 packadd minpac
 call minpac#init()
 
+call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('edkolev/tmuxline.vim')
 call minpac#add('vim-airline/vim-airline')
 call minpac#add('vim-airline/vim-airline-themes')
@@ -172,11 +173,9 @@ endif
 " MISC KEY MAPS
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 map <leader>y "*y
-" Move around splits with <c-hjkl>
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
+" Split window
+nmap sh :split<Return><C-w>w
+nmap sv :vsplit<Return><C-w>w
 " Insert a hash rocket with <c-l>
 imap <c-l> <space>=><space>
 " Can't be bothered to understand ESC vs <c-c> in insert mode
