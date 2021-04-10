@@ -8,6 +8,7 @@ autocmd!
 packadd minpac
 call minpac#init()
 
+call minpac#add('junegunn/fzf.vim')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('edkolev/tmuxline.vim')
 call minpac#add('vim-airline/vim-airline')
@@ -20,7 +21,6 @@ call minpac#add('tpope/vim-fugitive')
 call minpac#add('altercation/vim-colors-solarized')
 call minpac#add('tommcdo/vim-exchange')
 call minpac#add('vim-ruby/vim-ruby')
-call minpac#add('ctrlpvim/ctrlp.vim')
 call minpac#add('tpope/vim-bundler')
 call minpac#add('tpope/vim-rake')
 call minpac#add('tpope/vim-rbenv')
@@ -351,30 +351,35 @@ function! RunTests(filename)
   end
 endfunction
 
-" Ctrl P mappings
-let g:ctrlp_map = '<leader>f'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-\ 'file': '\v\.(exe|so|dll)$',
-\ 'link': 'some_bad_symbolic_links',
-\ }
-let g:ctrlp_show_hidden = 1
-let g:ctrlp_working_path_mode = 0
-let g:ctrlp_jump_to_buffer = 0
-let g:ctrlp_match_window = 'order:ttb'
 " Ripgrep
 if executable('rg')
   " Use rg over grep
   set grepprg=rg\ --vimgrep
   " Use rg as Ack program
   let g:ackprg = 'rg --vimgrep'
-  " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'rg %s --files --color=never --glob ""'
-  " rg is fast enough that CtrlP doesn't need to cache
-  "let g:ctrlp_use_caching = 0
 endif
+
+" fzf
+set rtp+=/usr/local/opt/fzf
+" Add namespace for fzf.vim exported commands
+let g:fzf_command_prefix = 'Fzf'
+" Customize fzf colors to match your color scheme
+" - fzf#wrap translates this to a set of `--color` options
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Comment'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+nnoremap <silent> <leader>f :FzfFiles<CR>
 
 " map Silver Searcher
 map <leader>a :Ack!<space>
