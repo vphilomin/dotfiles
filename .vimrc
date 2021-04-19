@@ -357,6 +357,7 @@ if executable('rg')
   set grepprg=rg\ --vimgrep
   " Use rg as Ack program
   let g:ackprg = 'rg --vimgrep'
+  let $FZF_DEFAULT_COMMAND = 'rg --files'
 endif
 
 " fzf
