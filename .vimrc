@@ -498,3 +498,16 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+" Global extensions
+let g:coc_global_extensions = [
+      \ 'coc-css',
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-markdownlint',
+      \ 'coc-prettier',
+      \ 'coc-sh',
+      \ 'coc-solargraph',
+      \ 'coc-tsserver',
+      \ 'coc-vimlsp',
+      \ 'coc-yaml',
+      \ ]
