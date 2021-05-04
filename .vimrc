@@ -15,6 +15,7 @@ call minpac#add('vim-airline/vim-airline')
 call minpac#add('vim-airline/vim-airline-themes')
 call minpac#add('jiangmiao/auto-pairs')
 call minpac#add('morhetz/gruvbox')
+call minpac#add('arcticicestudio/nord-vim')
 call minpac#add('neoclide/coc.nvim', {'branch': 'release'})
 call minpac#add('tpope/vim-surround')
 call minpac#add('tpope/vim-fugitive')
@@ -153,7 +154,8 @@ augroup END
 ":set t_Co=256 " 256 colors
 :set background=dark
 " color solarized
-color gruvbox
+" color gruvbox
+color nord
 " Hybrid line numbers
 :set nu
 :set rnu
