@@ -45,7 +45,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git ruby golang django scala gem history history-substring-search brew nanoc)
+plugins=(git ruby golang scala gem history history-substring-search brew nanoc)
 
 # User configuration
 
@@ -78,7 +78,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias l='exa -lah'
+alias l='eza -lah'
 
 if which rbenv > /dev/null; then eval "$(rbenv init - zsh)"; fi
 
