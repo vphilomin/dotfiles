@@ -14,7 +14,7 @@
 	ff = merge --ff-only
 	pullff = pull --ff-only
 	fa = fetch --all
-	pom = push origin master
+	pom = push origin main
 	b = branch
 	r = !GIT_NO_PAGER=1 git l -30
 	ra = !git r --all
